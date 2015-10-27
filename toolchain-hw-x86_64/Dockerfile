@@ -6,25 +6,22 @@ MAINTAINER Martin Lucina <martin@lucina.net>
 USER build
 WORKDIR /build
 
-# Clone latest rumprun master.
-RUN git clone git://github.com/rumpkernel/rumprun
-
-# Init submodules.
-WORKDIR /build/rumprun
-RUN git submodule init && git submodule update
-
-# Build the toolchain.
-RUN ./build-rr.sh -d /usr/local/rumprun hw build
-
-# Install the toolchain.
-RUN sudo ./build-rr.sh -d /usr/local/rumprun hw install
-ENV PATH /usr/local/rumprun/bin:$PATH
-
-# Delete the toolchain source, thus reducing the image size.
-WORKDIR /build
-RUN rm -rf /build/rumprun
+# Build and install the toolchain.
+# This must be done in a single layer to avoid ballooning the image size,
+# hence the series of "&&".
+# It'd be nice if Docker had support for controlling when layers are created,
+# wouldn't it? See
+# http://jasonwilder.com/blog/2014/08/19/squashing-docker-images/ for possible
+# solutions and https://github.com/docker/docker/issues/332 for bikeshed.
+RUN git clone https://github.com/rumpkernel/rumprun && \
+    cd /build/rumprun && \
+    git submodule init && git submodule update && \
+    ./build-rr.sh -d /usr/local/rumprun hw build && \
+    sudo ./build-rr.sh -d /usr/local/rumprun hw install && \
+    rm -rf /build/rumprun
 
 # Install a "Hello, World" and build it to verify that the toolchain works.
+ENV PATH /usr/local/rumprun/bin:$PATH
 COPY hello.c /build/
 RUN x86_64-rumprun-netbsd-gcc -o hello hello.c && \
     rumpbake hw_virtio hello.bin hello && \
