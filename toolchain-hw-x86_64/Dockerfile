@@ -32,6 +32,7 @@ RUN x86_64-rumprun-netbsd-gcc -o hello hello.c && \
 
 # Install a welcome script to give the user a hint about what to do next.
 # XXX Can't we just update .profile here and run a login shell?
-COPY entrypoint.sh hello.c /build/
-RUN chmod +x /build/entrypoint.sh
-CMD ["/build/entrypoint.sh"]
+COPY entrypoint.sh /build/
+# XXX Docker Hub fails this with "chmod: changing permissions of '/build/entrypoint.sh: Operation not permitted"
+# RUN chmod +x /build/entrypoint.sh
+CMD ["/bin/bash", "/build/entrypoint.sh"]
