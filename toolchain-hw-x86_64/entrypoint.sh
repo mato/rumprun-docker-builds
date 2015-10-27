@@ -10,7 +10,7 @@ The rumprun toolchain for '${PLATFORM}' has been installed in
 You might want to try:
 
 \$ ${PLATFORM}-gcc -o hello hello.c
-\$ rumpbake hw_virtio hello.bin hello
+\$ rumprun-bake hw_virtio hello.bin hello
 
 EOM
 exec /bin/bash
