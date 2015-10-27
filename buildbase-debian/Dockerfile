@@ -12,5 +12,8 @@ RUN apt-get update && \
 
 # Add a non-root user to run the build under, giving them sudo permissions
 # to install the built toolchain.
-RUN useradd -r -g root --uid=999 build &&
+RUN useradd -r -g root --uid=999 -m -d /build -s /bin/bash build && \
     echo "build ALL = NOPASSWD: ALL" > /etc/sudoers.d/build
+
+# "Docker run" should land in the "build" user.
+USER build
