@@ -24,7 +24,7 @@ RUN git clone https://github.com/rumpkernel/rumprun && \
 ENV PATH /usr/local/rumprun/bin:$PATH
 COPY hello.c /build/
 RUN x86_64-rumprun-netbsd-gcc -o hello hello.c && \
-    rumpbake hw_virtio hello.bin hello && \
+    rumprun-bake hw_virtio hello.bin hello && \
     rm -f hello.bin hello
 
 # Install a welcome script to give the user a hint about what to do next.
