@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -ex
+
+case "$1" in
+    "" )
+        echo "you must provide a rumprun .bin image"
+        exit 1
+        ;;
+
+    * ) IMAGE=$1
+        ;;
+esac
+
+PORT=$2
+
+sudo qemu-system-x86_64                         \
+     -m 64                                      \
+     -net user,hostfwd=::$PORT-:$PORT           \
+     -display curses -monitor /dev/stdout       \
+     -kernel $IMAGE.bin                         \
+     -append '{"cmdline": "'"$IMAGE"'.bin"}'
