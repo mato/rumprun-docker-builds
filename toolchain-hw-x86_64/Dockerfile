@@ -7,7 +7,7 @@ USER build
 WORKDIR /build
 
 # DESTDIR specifies where the toolchain is installed in the container.
-ENV DESTDIR=/usr/local/rumprun
+ENV DESTDIR=/usr/local
 
 # Build and install the toolchain.
 # This must be done in a single layer to avoid ballooning the image size,
@@ -24,7 +24,6 @@ RUN git clone https://github.com/rumpkernel/rumprun && \
     rm -rf /build/rumprun
 
 # Install a "Hello, World" and build it to verify that the toolchain works.
-ENV PATH $DESTDIR/bin:$PATH
 COPY hello.c /build/
 RUN x86_64-rumprun-netbsd-gcc -o hello hello.c && \
     rumprun-bake hw_virtio hello.bin hello && \

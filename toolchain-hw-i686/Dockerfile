@@ -8,7 +8,7 @@ WORKDIR /build
 
 # DESTDIR specifies where the toolchain is installed in the container.
 # BUILDRUMP_EXTRA is required for an -m32 build.
-ENV DESTDIR=/usr/local/rumprun \
+ENV DESTDIR=/usr/local \
     BUILDRUMP_EXTRA="-F ACLFLAGS=-m32 -F ACFLAGS=-march=i686"
 
 # Build and install the toolchain.
@@ -26,7 +26,6 @@ RUN git clone https://github.com/rumpkernel/rumprun && \
     rm -rf /build/rumprun
 
 # Install a "Hello, World" and build it to verify that the toolchain works.
-ENV PATH $DESTDIR/bin:$PATH
 COPY hello.c /build/
 RUN i486-rumprun-netbsdelf-gcc -o hello hello.c && \
     rumprun-bake hw_virtio hello.bin hello && \
