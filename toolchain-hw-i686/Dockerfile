@@ -6,6 +6,11 @@ MAINTAINER Martin Lucina <martin@lucina.net>
 USER build
 WORKDIR /build
 
+# DESTDIR specifies where the toolchain is installed in the container.
+# BUILDRUMP_EXTRA is required for an -m32 build.
+ENV DESTDIR=/usr/local/rumprun \
+    BUILDRUMP_EXTRA="-F ACLFLAGS=-m32 -F ACFLAGS=-march=i686"
+
 # Build and install the toolchain.
 # This must be done in a single layer to avoid ballooning the image size,
 # hence the series of "&&".
@@ -16,12 +21,12 @@ WORKDIR /build
 RUN git clone https://github.com/rumpkernel/rumprun && \
     cd /build/rumprun && \
     git submodule init && git submodule update && \
-    ./build-rr.sh -d /usr/local/rumprun hw build -- -F ACFLAGS=-m32 -F ACLFLAGS=-march=i686 && \
-    sudo ./build-rr.sh -d /usr/local/rumprun hw install -- -F ACLFLAGS=-m32 -F ACLFLAGS=-march=i686 && \
+    ./build-rr.sh -d $DESTDIR -o ./obj hw build -- $BUILDRUMP_EXTRA && \
+    sudo ./build-rr.sh -d $DESTDIR -o ./obj hw install && \
     rm -rf /build/rumprun
 
 # Install a "Hello, World" and build it to verify that the toolchain works.
-ENV PATH /usr/local/rumprun/bin:$PATH
+ENV PATH $DESTDIR/bin:$PATH
 COPY hello.c /build/
 RUN i486-rumprun-netbsdelf-gcc -o hello hello.c && \
     rumprun-bake hw_virtio hello.bin hello && \
