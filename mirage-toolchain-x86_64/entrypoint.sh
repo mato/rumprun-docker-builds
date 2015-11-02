@@ -20,7 +20,7 @@ Or, to run on OSX using qemu:
 
 $ sudo apt-get install -y qemu
 $ chmod 755 rumprun-qemu
-$ rumprun-qemu <image.bin> <port-to-expose>
+$ rumprun-qemu <rumprun-image.bin> <TCP-port-to-expose>
 
 EOF
 exec /bin/bash
