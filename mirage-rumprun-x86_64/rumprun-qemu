@@ -17,6 +17,6 @@ PORT=$2
 sudo qemu-system-x86_64                         \
      -m 64                                      \
      -net user,hostfwd=::$PORT-:$PORT           \
-     -display curses -monitor /dev/stdout       \
+     -vga none -nographic                       \
      -kernel $IMAGE.bin                         \
      -append '{"cmdline": "'"$IMAGE"'.bin"}'
