@@ -17,7 +17,7 @@ RUN git clone https://github.com/rumpkernel/rumprun && \
     cd /build/rumprun && \
     git submodule init && git submodule update && \
     ./build-rr.sh -d /usr/local/rumprun hw build -- -F ACFLAGS=-m32 -F ACLFLAGS=-march=i686 && \
-    sudo ./build-rr.sh -d /usr/local/rumprun hw install && \
+    sudo ./build-rr.sh -d /usr/local/rumprun -o ./obj-i386-hw hw install && \
     rm -rf /build/rumprun
 
 # Install a "Hello, World" and build it to verify that the toolchain works.
