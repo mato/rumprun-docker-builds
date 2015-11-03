@@ -8,6 +8,7 @@ RUN sudo apt-get update && \
         --no-install-recommends \
         autoconf                \
         automake                \
+        cmake                   \
         curl                    \
         genisoimage             \
         libssl-dev              \
