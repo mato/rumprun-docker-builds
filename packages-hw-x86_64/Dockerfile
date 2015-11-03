@@ -23,7 +23,7 @@ ENV BUILD_PACKAGES="mathopd hiawatha leveldb libxml2 pcre mpg123 nginx php"
 RUN git clone https://github.com/rumpkernel/rumprun-packages && \
     cd /build/rumprun-packages && \
     echo "RUMPRUN_TOOLCHAIN_TUPLE=x86_64-rumprun-netbsd" > config.mk && \
-    for pkg in ${BUILD_PACKAGES}; do make -C ${pkg} || exit 1; done
+    for pkg in ${BUILD_PACKAGES}; do make -j4 -C ${pkg} || exit 1; done
 
 # XXX Need to do a make clean-world or similar here which removes the build
 # trees and archives, but keeps the built unikernels.
