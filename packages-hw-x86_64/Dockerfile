@@ -1,0 +1,31 @@
+# This container builds the rumprun packages for hw/x86_64
+FROM mato/rumprun-toolchain-hw-x86_64
+MAINTAINER Martin Lucina <martin@lucina.net>
+
+# Install additional build prerequisites.
+USER root
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
+        --no-install-recommends \
+        autoconf                \
+        automake                \
+        genisoimage             \
+        libssl-dev              \
+        makefs               && \
+    apt-get clean
+
+# List of packages we build. This will eventually just be "world" but need to
+# start with something that doesn't take many hours.
+ENV BUILD_PACKAGES="mathopd hiawatha leveldb libxml2 pcre mpg123 nginx php"
+
+# Build the packages.
+RUN git clone https://github.com/rumpkernel/rumprun-packages && \
+    cd /build/rumprun-packages && \
+    echo "RUMPRUN_TOOLCHAIN_TUPLE=x86_64-rumprun-netbsd" > config.mk && \
+    for pkg in ${BUILD_PACKAGES}; do make -C ${pkg} || exit 1; done
+
+# XXX Need to do a make clean-world or similar here which removes the build
+# trees and archives, but keeps the built unikernels.
+
+# No sense to "docker run" this container.
+CMD ["echo", "This is a CI container, nothing to run here!"]
