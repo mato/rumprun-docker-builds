@@ -1,0 +1,32 @@
+# This container builds the rumprun packages for hw/i686
+FROM mato/rumprun-toolchain-hw-i686
+MAINTAINER Martin Lucina <martin@lucina.net>
+
+# Install additional build prerequisites.
+RUN sudo apt-get update && \
+    DEBIAN_FRONTEND=noninteractive sudo apt-get install -q -y \
+        --no-install-recommends \
+        autoconf                \
+        automake                \
+        cmake                   \
+        curl                    \
+        genisoimage             \
+        libssl-dev              \
+        makefs               && \
+    sudo apt-get clean
+
+# List of packages we build. This will eventually just be "world" but need to
+# start with something that doesn't take many hours.
+ENV BUILD_PACKAGES="mathopd hiawatha leveldb libxml2 pcre mpg123 nginx php"
+
+# Build the packages.
+RUN git clone https://github.com/rumpkernel/rumprun-packages && \
+    cd /build/rumprun-packages && \
+    echo "RUMPRUN_TOOLCHAIN_TUPLE=i486-rumprun-netbsdelf" > config.mk && \
+    for pkg in ${BUILD_PACKAGES}; do make -j4 -C ${pkg} || exit 1; done
+
+# XXX Need to do a make clean-world or similar here which removes the build
+# trees and archives, but keeps the built unikernels.
+
+# No sense to "docker run" this container.
+CMD ["echo", "This is a CI container, nothing to run here!"]
