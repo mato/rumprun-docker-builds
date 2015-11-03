@@ -6,9 +6,6 @@ MAINTAINER Martin Lucina <martin@lucina.net>
 USER build
 WORKDIR /build
 
-# DESTDIR specifies where the toolchain is installed in the container.
-ENV DESTDIR=/usr/local
-
 # Build and install the toolchain.
 # This must be done in a single layer to avoid ballooning the image size,
 # hence the series of "&&".
@@ -16,7 +13,10 @@ ENV DESTDIR=/usr/local
 # wouldn't it? See
 # http://jasonwilder.com/blog/2014/08/19/squashing-docker-images/ for possible
 # solutions and https://github.com/docker/docker/issues/332 for bikeshed.
-RUN git clone https://github.com/rumpkernel/rumprun && \
+# DESTDIR specifies where the toolchain is installed in the container.
+RUN DESTDIR=/usr/local && \
+    BUILDRUMP_EXTRA= && \
+    git clone https://github.com/rumpkernel/rumprun && \
     cd /build/rumprun && \
     git submodule init && git submodule update && \
     ./build-rr.sh -d $DESTDIR -o ./obj hw build -- $BUILDRUMP_EXTRA && \
