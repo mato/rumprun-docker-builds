@@ -3,7 +3,7 @@ FROM mato/rumprun-toolchain-hw-x86_64
 MAINTAINER Martin Lucina <martin@lucina.net>
 
 # Build.
-RUN x86_64-rumprun-netbsd-gcc -o hello hello.c && \
+RUN x86_64-rumprun-netbsd-gcc -o blah hello.c && \
     rumprun-bake hw_virtio hello.bin hello && \
     false && false
 
