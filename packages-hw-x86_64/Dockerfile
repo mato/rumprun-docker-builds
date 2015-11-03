@@ -3,16 +3,15 @@ FROM mato/rumprun-toolchain-hw-x86_64
 MAINTAINER Martin Lucina <martin@lucina.net>
 
 # Install additional build prerequisites.
-USER root
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
+RUN sudo apt-get update && \
+    DEBIAN_FRONTEND=noninteractive sudo apt-get install -q -y \
         --no-install-recommends \
         autoconf                \
         automake                \
         genisoimage             \
         libssl-dev              \
         makefs               && \
-    apt-get clean
+    sudo apt-get clean
 
 # List of packages we build. This will eventually just be "world" but need to
 # start with something that doesn't take many hours.
