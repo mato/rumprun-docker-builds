@@ -17,13 +17,13 @@ RUN sudo apt-get update && \
 
 # List of packages we build. This will eventually just be "world" but need to
 # start with something that doesn't take many hours.
-ENV BUILD_PACKAGES="mathopd hiawatha leveldb libxml2 pcre mpg123 nginx php ngircd redis mysql erlang"
+ENV BUILD_PACKAGES="mathopd hiawatha leveldb libxml2 pcre mpg123 nginx php ngircd redis mysql roundcube python"
 
 # Build the packages.
 RUN git clone https://github.com/rumpkernel/rumprun-packages && \
     cd /build/rumprun-packages && \
     echo "RUMPRUN_TOOLCHAIN_TUPLE=i486-rumprun-netbsdelf" > config.mk && \
-    for pkg in ${BUILD_PACKAGES}; do make -j1 -C ${pkg} || exit 1; done
+    for pkg in ${BUILD_PACKAGES}; do make -j4 -C ${pkg} || exit 1; done
 
 # XXX Need to do a make clean-world or similar here which removes the build
 # trees and archives, but keeps the built unikernels.
