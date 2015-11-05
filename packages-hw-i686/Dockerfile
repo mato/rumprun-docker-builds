@@ -12,8 +12,9 @@ RUN sudo apt-get update && \
         curl                    \
         genisoimage             \
         libssl-dev              \
-        makefs               && \
-    sudo apt-get clean
+        makefs                  \
+        python                  \
+    && sudo apt-get clean
 
 # List of packages we build. This will eventually just be "world" but need to
 # start with something that doesn't take many hours.
