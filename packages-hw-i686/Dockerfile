@@ -21,7 +21,7 @@ RUN sudo apt-get update && \
 
 # List of packages we build. This will eventually just be "world" but need to
 # start with something that doesn't take many hours.
-ENV BUILD_PACKAGES="mathopd hiawatha leveldb libxml2 pcre mpg123 nginx php ngircd redis mysql roundcube python"
+ENV BUILD_PACKAGES="mathopd hiawatha leveldb libxml2 pcre mpg123 nginx php ngircd redis mysql roundcube nodejs"
 
 # Build the packages.
 RUN git clone https://github.com/rumpkernel/rumprun-packages && \
