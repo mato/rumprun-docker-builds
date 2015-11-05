@@ -14,6 +14,9 @@ RUN sudo apt-get update && \
         libssl-dev              \
         makefs                  \
         python                  \
+        python-dev              \
+        python3                 \
+        python3-dev             \
     && sudo apt-get clean
 
 # List of packages we build. This will eventually just be "world" but need to
