@@ -10,6 +10,7 @@ RUN sudo apt-get update && \
         automake                \
         cmake                   \
         curl                    \
+        file                    \
         genisoimage             \
         libssl-dev              \
         makefs                  \
@@ -19,15 +20,17 @@ RUN sudo apt-get update && \
         python3-dev             \
     && sudo apt-get clean
 
-# List of packages we build. This will eventually just be "world" but need to
-# start with something that doesn't take many hours.
-ENV BUILD_PACKAGES="mathopd hiawatha leveldb libxml2 pcre mpg123 nginx php ngircd redis mysql roundcube rust"
+# List of packages we build. This will eventually just be "world".
+# TODO rust: currently only supports x86_64, left out.
+# TODO erlang: does not build (see rumprun-packages issues)
+ENV BUILD_PACKAGES="mathopd hiawatha leveldb libxml2 pcre mpg123 nginx php ngircd redis mysql roundcube python nodejs"
 
-# Build the packages.
-RUN git clone https://github.com/rumpkernel/rumprun-packages && \
+# Build the packages, using as many CPUs as available.
+RUN STDJ=$(cat /proc/cpuinfo | grep '^processor.*:' | wc -l) && \
+    git clone https://github.com/rumpkernel/rumprun-packages && \
     cd /build/rumprun-packages && \
     echo "RUMPRUN_TOOLCHAIN_TUPLE=i486-rumprun-netbsdelf" > config.mk && \
-    for pkg in ${BUILD_PACKAGES}; do make -j4 -C ${pkg} || exit 1; done
+    for pkg in ${BUILD_PACKAGES}; do make -j${STDJ} -C ${pkg} || exit 1; done
 
 # XXX Need to do a make clean-world or similar here which removes the build
 # trees and archives, but keeps the built unikernels.
