@@ -21,9 +21,7 @@ RUN sudo apt-get update && \
     && sudo apt-get clean
 
 # List of packages we build. This will eventually just be "world".
-# TODO erlang: does not build (see rumprun-packages issues)
-# TODO rust: times out build
-ENV BUILD_PACKAGES="mathopd hiawatha leveldb libxml2 pcre mpg123 nginx php ngircd redis mysql roundcube python nodejs"
+ENV BUILD_PACKAGES="nginx php mysql"
 
 # Build the packages, using as many CPUs as available.
 RUN STDJ=$(cat /proc/cpuinfo | grep '^processor.*:' | wc -l) && \
