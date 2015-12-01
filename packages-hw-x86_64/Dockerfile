@@ -1,5 +1,5 @@
 # This container builds the rumprun packages for hw/x86_64
-FROM mato/rumprun-toolchain-hw-x86_64
+FROM mato/rumprun-toolchain-hw-x86_64:dceu2015-demo
 MAINTAINER Martin Lucina <martin@lucina.net>
 
 # Install additional build prerequisites.
@@ -29,6 +29,7 @@ ENV BUILD_PACKAGES="mathopd hiawatha leveldb libxml2 pcre mpg123 nginx php ngirc
 RUN STDJ=$(cat /proc/cpuinfo | grep '^processor.*:' | wc -l) && \
     git clone https://github.com/rumpkernel/rumprun-packages && \
     cd /build/rumprun-packages && \
+    git checkout `git rev-list -n 1 --before="2015-11-26 16:26:00 2015" master` && \
     echo "RUMPRUN_TOOLCHAIN_TUPLE=x86_64-rumprun-netbsd" > config.mk && \
     for pkg in ${BUILD_PACKAGES}; do make -j${STDJ} -C ${pkg} || exit 1; done
 

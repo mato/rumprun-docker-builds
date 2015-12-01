@@ -18,6 +18,7 @@ RUN DESTDIR=/usr/local && \
     BUILDRUMP_EXTRA= && \
     git clone https://github.com/rumpkernel/rumprun && \
     cd /build/rumprun && \
+    git checkout `git rev-list -n 1 --before="2015-11-26 16:26:00 2015" master` && \
     git submodule init && git submodule update && \
     ./build-rr.sh -d $DESTDIR -o ./obj hw build -- $BUILDRUMP_EXTRA && \
     sudo ./build-rr.sh -d $DESTDIR -o ./obj hw install && \
