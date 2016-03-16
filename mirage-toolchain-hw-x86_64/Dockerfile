@@ -8,7 +8,7 @@ ENV OPAMYES=1 OPAMJOBS=4
 RUN sudo apt-get update                                     \
     && DEBIAN_FRONTEND=noninteractive                       \
        sudo apt-get install -q -y --no-install-recommends   \
-         m4 aspcud opam pkg-config                          \
+         m4 aspcud opam pkg-config libncurses5-dev          \
     && sudo apt-get clean
 
 # initialise OPAM; add rumprun packages
