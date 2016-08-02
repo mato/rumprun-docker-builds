@@ -7,7 +7,7 @@ MAINTAINER Martin Lucina <martin@lucina.net>
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
         --no-install-recommends \
-        ca-certificates build-essential git sudo && \
+        ca-certificates build-essential zlib1g-dev git sudo && \
     apt-get clean
 
 # Add a non-root user to run the build under, giving them sudo permissions
