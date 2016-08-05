@@ -4,11 +4,20 @@ MAINTAINER Martin Lucina <martin@lucina.net>
 # Install build prerequisites.
 # ca-certificates is required for git clone https:// to work
 # sudo is required for step-up to root
+# xorriso, grub-pc-bin and genisoimage are useful for downstream use (rumprun iso)
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
         --no-install-recommends \
-        ca-certificates build-essential zlib1g-dev libxen-dev git sudo && \
-    apt-get clean
+        build-essential \
+        ca-certificates \
+        genisoimage \
+        git \
+        grub-pc-bin \
+        libxen-dev \
+        sudo \
+        xorriso \
+        zlib1g-dev \
+    && apt-get clean
 
 # Add a non-root user to run the build under, giving them sudo permissions
 # to install the built toolchain.
